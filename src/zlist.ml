@@ -4,9 +4,7 @@ module List = struct
   include List
 
   let spf = Printf.sprintf
-
   let nth_opt l x = try nth_opt l x with _ -> None
-
   let destruct_opt = function [] -> None | h :: t -> Some (h, t)
 
   let update_opt l idx x =
@@ -15,6 +13,16 @@ module List = struct
       let arr = Array.of_list l in
       Array.set arr idx x;
       Some (Array.to_list arr)
+
+  let substract eq a b = List.filter (fun x -> not (List.exists (eq x) b)) a
+
+  let slow_rm_dup eq a =
+    let rec aux res = function
+      | [] -> res
+      | h :: t ->
+          if List.exists (eq h) res then aux res t else aux (res @ [ h ]) t
+    in
+    aux [] a
 
   let mid_partition l =
     let mid = length l / 2 in
@@ -511,17 +519,13 @@ end
 
 module StrList = struct
   let eq l1 l2 = List.eq String.equal l1 l2
-
   let to_string l = List.to_string (fun x -> x) l
-
   let search errinfo l a = List.find errinfo (fun (k, _) -> String.equal k a) l
 end
 
 module IntList = struct
   let spf = Printf.sprintf
-
   let exists x l = List.exists (fun a -> a == x) l
-
   let contain l0 l1 = List.for_all (fun x -> exists x l1) l0
 
   let rec keep_ord l0 l1 =
@@ -533,13 +537,9 @@ module IntList = struct
     match l0 with [] -> true | h :: t -> aux2 h t && keep_ord t l1
 
   let forall_ge l = List.for_alli (fun h i -> h >= i) l
-
   let forall_gt l = List.for_alli (fun h i -> h > i) l
-
   let forall_eq l = List.for_alli (fun h i -> h == i) l
-
   let eq l0 l1 = List.eq (fun x y -> x == y) l0 l1
-
   let sum = List.fold_left (fun sum x -> sum + x) 0
 
   let to_string l =
