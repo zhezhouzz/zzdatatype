@@ -455,7 +455,7 @@ module List = struct
   let choose_eq_all l =
     List.flatten @@ List.init (List.length l + 1) (fun n -> choose_n_eq l n)
 
-  let sublist l (s, e) =
+  let sublist l ~start_included:s ~end_excluded:e =
     let rec aux r i l =
       if i >= e then r
       else

@@ -1,7 +1,6 @@
 open Sexplib.Std
 
 type tree = Node of int * int * tree list [@@deriving sexp]
-
 type t = tree list [@@deriving sexp]
 
 exception Empty
@@ -11,9 +10,7 @@ let empty = []
 open Zlist
 
 let deep = List.length
-
 let is_single_tree = function Node (_, _, l) -> List.length l == 0
-
 let deep_tree = function Node (_, _, l) -> 1 + deep l
 
 let rec mem x = function
@@ -41,8 +38,10 @@ let of_list l =
     if List.length l == 0 then tmp
     else if List.length l < num then raise @@ failwith "wrong binomial farmat"
     else
-      let a = List.sublist l (0, num) in
-      let l' = List.sublist l (num, List.length l) in
+      let a = List.sublist l ~start_included:0 ~end_excluded:num in
+      let l' =
+        List.sublist l ~start_included:num ~end_excluded:(List.length l)
+      in
       make (tmp @ [ make_one a ]) (num * 2) l'
   in
   make [] num l
@@ -133,11 +132,8 @@ let compare t1 t2 =
   aux t1 t2
 
 let eq t1 t2 = compare t1 t2 == 0
-
 let is_empty ts = ts = []
-
 let rank (Node (r, _, _)) = r
-
 let root (Node (_, x, _)) = x
 
 let link (Node (r, x1, c1) as t1) (Node (_, x2, c2) as t2) =
@@ -237,7 +233,6 @@ let min_opt t =
     None t
 
 let t_head = function Node (r, x, _) -> (r, x)
-
 let t_head_update t x = match t with Node (r, _, l) -> Node (r, x, l)
 
 let l_head_update l x =
