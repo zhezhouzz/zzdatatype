@@ -30,7 +30,7 @@ end
 module BoolVec = struct
   type t = { cur : int; arr : bool array }
 
-  let init_as_min n = { cur = 0; arr = Array.init n (fun _ -> false) }
+  let init_as_min n = { cur = n - 1; arr = Array.init n (fun _ -> false) }
 
   let increase { cur; arr } =
     let rec aux cur =
@@ -40,7 +40,7 @@ module BoolVec = struct
         aux (cur - 1)
       else
         let () = arr.(cur) <- true in
-        Some { cur = 0; arr }
+        Some { cur = Array.length arr - 1; arr }
     in
     aux cur
 
