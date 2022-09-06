@@ -27,6 +27,26 @@ module Array = struct
     aux i
 end
 
+module BoolVec = struct
+  type t = { cur : int; arr : bool array }
+
+  let init_as_min n = { cur = 0; arr = Array.init n (fun _ -> false) }
+
+  let increase { cur; arr } =
+    let rec aux cur =
+      if cur < 0 then None
+      else if arr.(cur) then
+        let () = arr.(cur) <- false in
+        aux (cur - 1)
+      else
+        let () = arr.(cur) <- true in
+        Some { cur = 0; arr }
+    in
+    aux cur
+
+  let to_list { arr; _ } = Array.to_list arr
+end
+
 module Bitarray = struct
   type t = { len : int; buf : bytes }
 
