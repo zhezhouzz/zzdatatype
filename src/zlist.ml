@@ -261,6 +261,14 @@ module List = struct
     in
     aux [] l1
 
+  let union compare l1 l2 =
+    let rec aux r = function
+      | [] -> r
+      | h :: t ->
+          if exists (fun y -> compare h y) l2 then aux r t else aux (h :: r) t
+    in
+    aux [] l1
+
   (* let remove_duplicates_eq l = remove_duplicates (fun x y -> x == y) l *)
 
   let inner_layout l split default =
